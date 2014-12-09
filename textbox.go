@@ -19,6 +19,7 @@ func Init() error {
 	if err := termbox.Init(); err != nil {
 		return err
 	}
+	updateWindowGeometry()
 	events := make(chan *termbox.Event)
 	go func() {
 		for {
@@ -35,8 +36,11 @@ func Init() error {
 	go func() {
 		select {
 		case ev := <-events:
-			_ = ev
-			//TODO
+			switch ev.Type {
+			case termbox.EventResize:
+				termbox.Flush()
+				updateWindowGeometry()
+			}
 		case <-closed:
 			return
 		}
