@@ -6,6 +6,9 @@ var Window *Box
 
 func init() {
 	Window = New()
+	initCallbacks = append(initCallbacks, func() {
+		updateWindowGeometry()
+	})
 }
 
 func updateWindowGeometry() {

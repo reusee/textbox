@@ -9,6 +9,8 @@ import (
 var (
 	closed    chan struct{}
 	closeOnce sync.Once
+
+	initCallbacks []func()
 )
 
 func init() {
@@ -19,7 +21,6 @@ func Init() error {
 	if err := termbox.Init(); err != nil {
 		return err
 	}
-	updateWindowGeometry()
 	events := make(chan *termbox.Event)
 	go func() {
 		for {
@@ -45,6 +46,9 @@ func Init() error {
 			return
 		}
 	}()
+	for _, cb := range initCallbacks {
+		cb()
+	}
 	return nil
 }
 
