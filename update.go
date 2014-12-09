@@ -2,13 +2,13 @@ package textbox
 
 import "container/list"
 
-var geometryUpdateSequence, fillSequence *list.List
+var layoutSequence, fillSequence *list.List
 
 func init() {
-	geometryUpdateSequence = list.New()
+	layoutSequence = list.New()
 	fillSequence = list.New()
 	initCallbacks = append(initCallbacks, func() {
-		Window.geometryUpdateElement = geometryUpdateSequence.PushBack(Window)
+		Window.layoutElement = layoutSequence.PushBack(Window)
 		Window.fillElement = fillSequence.PushBack(Window)
 	})
 }
