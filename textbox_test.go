@@ -13,7 +13,7 @@ func TestInitAndClose(t *testing.T) {
 func TestWindowSize(t *testing.T) {
 	Init()
 	time.Sleep(time.Second)
-	if Window.W == 0 || Window.H == 0 {
+	if Window.BottomRight.X == 0 || Window.BottomRight.Y == 0 {
 		t.Fatal("window size")
 	}
 	Close()

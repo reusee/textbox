@@ -2,10 +2,14 @@ package textbox
 
 import "container/list"
 
+type Point struct {
+	X, Y int
+}
+
 type Box struct {
-	X, Y, W, H    int
-	layoutElement *list.Element
-	fillElement   *list.Element
+	TopLeft, BottomRight Point
+	adjustElement        *list.Element
+	fillElement          *list.Element
 }
 
 func New() *Box {

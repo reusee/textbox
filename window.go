@@ -12,6 +12,5 @@ func init() {
 }
 
 func updateWindowGeometry() {
-	Window.W, Window.H = termbox.Size()
-	//lg("window size %d %d\n", Window.W, Window.H)
+	Window.BottomRight.X, Window.BottomRight.Y = termbox.Size()
 }
