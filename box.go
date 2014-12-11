@@ -12,7 +12,27 @@ type Box struct {
 	fillElement          *list.Element
 }
 
-func New() *Box {
+type Align struct {
+	To               *Box
+	Position         Position
+	XOffset, YOffset int
+}
+
+type Position int
+
+const (
+	TopLeft Position = iota
+	TopRight
+	BottomLeft
+	BottomRight
+)
+
+type Fill struct {
+	Func  func()
+	Above *Box
+}
+
+func New(topLeftAlign, bottomRightAlign Align, fill Fill) *Box {
 	box := &Box{}
 	return box
 }

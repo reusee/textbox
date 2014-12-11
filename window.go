@@ -5,7 +5,7 @@ import "github.com/nsf/termbox-go"
 var Window *Box
 
 func init() {
-	Window = New()
+	Window = &Box{}
 	initCallbacks = append(initCallbacks, func() {
 		updateWindowGeometry()
 	})
