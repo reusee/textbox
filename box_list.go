@@ -13,3 +13,12 @@ func NewBoxList() *BoxList {
 		m: make(map[*Box]*list.Element),
 	}
 }
+
+func (l *BoxList) Append(boxes ...*Box) {
+}
+
+func (l *BoxList) InsertAfter(target, box *Box) {
+}
+
+func (l *BoxList) InsertBefore(target, box *Box) {
+}
