@@ -9,8 +9,8 @@ func TestBox(t *testing.T) {
 		func(box *Box) {
 		})
 	bottomBar := New(
-		Window.BottomLeftFunc(),
-		Window.BottomRightFunc(),
+		Window.BottomLeft,
+		Window.BottomRight,
 		func(box *Box) {
 		})
 	var text string
@@ -58,32 +58,13 @@ func TestBoxPoints(t *testing.T) {
 	if p := box.BottomRight(); p.X != 7 || p.Y != 8 {
 		t.Fatal("point")
 	}
+}
 
-	if p := box.TopLeftFunc()(); p.X != 1 || p.Y != 2 {
-		t.Fatal("point")
+func TestPointMove(t *testing.T) {
+	if p := (Point{0, 0}).Move(1, 1); p.X != 1 || p.Y != 1 {
+		t.Fatal("move")
 	}
-	if p := box.TopCenterFunc()(); p.X != 4 || p.Y != 2 {
-		t.Fatal("point")
-	}
-	if p := box.TopRightFunc()(); p.X != 7 || p.Y != 2 {
-		t.Fatal("point")
-	}
-	if p := box.CenterLeftFunc()(); p.X != 1 || p.Y != 5 {
-		t.Fatal("point")
-	}
-	if p := box.CenterFunc()(); p.X != 4 || p.Y != 5 {
-		t.Fatal("point")
-	}
-	if p := box.CenterRightFunc()(); p.X != 7 || p.Y != 5 {
-		t.Fatal("point")
-	}
-	if p := box.BottomLeftFunc()(); p.X != 1 || p.Y != 8 {
-		t.Fatal("point")
-	}
-	if p := box.BottomCenterFunc()(); p.X != 4 || p.Y != 8 {
-		t.Fatal("point")
-	}
-	if p := box.BottomRightFunc()(); p.X != 7 || p.Y != 8 {
-		t.Fatal("point")
+	if p := (Point{5, 6}).Move(-7, -8); p.X != -2 || p.Y != -2 {
+		t.Fatal("move")
 	}
 }

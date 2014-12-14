@@ -49,31 +49,3 @@ func (b *Box) BottomCenter() Point {
 func (b *Box) BottomRight() Point {
 	return b.bottomRight
 }
-
-func (b *Box) TopLeftFunc() func() Point {
-	return func() Point { return b.TopLeft() }
-}
-func (b *Box) TopCenterFunc() func() Point {
-	return func() Point { return b.TopCenter() }
-}
-func (b *Box) TopRightFunc() func() Point {
-	return func() Point { return b.TopRight() }
-}
-func (b *Box) CenterLeftFunc() func() Point {
-	return func() Point { return b.CenterLeft() }
-}
-func (b *Box) CenterFunc() func() Point {
-	return func() Point { return b.Center() }
-}
-func (b *Box) CenterRightFunc() func() Point {
-	return func() Point { return b.CenterRight() }
-}
-func (b *Box) BottomLeftFunc() func() Point {
-	return func() Point { return b.BottomLeft() }
-}
-func (b *Box) BottomCenterFunc() func() Point {
-	return func() Point { return b.BottomCenter() }
-}
-func (b *Box) BottomRightFunc() func() Point {
-	return func() Point { return b.BottomRight() }
-}
