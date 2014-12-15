@@ -24,19 +24,19 @@ func Init() error {
 		for {
 			ev := termbox.PollEvent()
 			switch ev.Type {
-			case termbox.EventError:
+			case termbox.EventError: // NOCOVER
 				Close()
 				return
-			default:
+			default: // TODO cover this NOCOVER
 				events <- &ev
 			}
 		}
 	}()
 	go func() {
 		select {
-		case ev := <-events:
+		case ev := <-events: // TODO cover this NOCOVER
 			switch ev.Type {
-			case termbox.EventResize:
+			case termbox.EventResize: // NOCOVER
 				termbox.Flush()
 				updateWindowGeometry()
 			}
