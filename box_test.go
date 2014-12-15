@@ -19,10 +19,10 @@ func TestBox(t *testing.T) {
 		func() Point { return Window.Center().Move(DisplayWidth(text)/2, 0) },
 		func(box *Box) {
 		})
+	//TODO
 	_ = topBar
 	_ = bottomBar
 	_ = centerText
-	//TODO
 }
 
 func TestBoxPoints(t *testing.T) {

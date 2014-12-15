@@ -14,13 +14,11 @@ var (
 )
 
 func init() {
+	termbox.Init()
 	closed = make(chan struct{})
 }
 
 func Init() error {
-	if err := termbox.Init(); err != nil {
-		return err
-	}
 	events := make(chan *termbox.Event)
 	go func() {
 		for {
@@ -56,5 +54,6 @@ func Close() {
 	closeOnce.Do(func() {
 		close(closed)
 		termbox.Close()
+		initCallbacks = initCallbacks[0:0]
 	})
 }
