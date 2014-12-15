@@ -14,11 +14,11 @@ var (
 )
 
 func init() {
-	termbox.Init()
 	closed = make(chan struct{})
 }
 
 func Init() error {
+	termbox.Init()
 	events := make(chan *termbox.Event)
 	go func() {
 		for {
