@@ -11,6 +11,7 @@ func TestDependencies(t *testing.T) {
 	deps.Add(b2, b1)
 	deps.Add(b3, b2)
 	deps.Add(b3, b1)
+	deps.Add(b1, b3)
 
 	expected := []*Box{Window, b1, b2, b3}
 	n := 0
