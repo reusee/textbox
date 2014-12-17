@@ -3,23 +3,31 @@ package textbox
 import "testing"
 
 func TestBox(t *testing.T) {
-	topBar := New(
+	topBar := New()
+	topBar.SetAdjust(
 		func() Point { return Window.TopLeft() },
 		func() Point { return Window.TopRight() },
-		func(box *Box) {
-		})
-	bottomBar := New(
+		Window)
+	topBar.SetFill(func(box *Box) {
+	}, Window)
+
+	bottomBar := New()
+	bottomBar.SetAdjust(
 		Window.BottomLeft,
 		Window.BottomRight,
-		func(box *Box) {
-		})
+		Window)
+	bottomBar.SetFill(func(box *Box) {
+	}, Window)
+
+	centerText := New()
 	var text string
-	centerText := New(
+	centerText.SetAdjust(
 		func() Point { return Window.Center().Move(-DisplayWidth(text)/2, 0) },
 		func() Point { return Window.Center().Move(DisplayWidth(text)/2, 0) },
-		func(box *Box) {
-		})
-	//TODO
+		Window)
+	centerText.SetFill(func(box *Box) {
+	}, Window)
+
 	_ = topBar
 	_ = bottomBar
 	_ = centerText

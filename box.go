@@ -14,11 +14,22 @@ type Box struct {
 	fillFunc                     func(*Box)
 }
 
-func New(topLeftFunc, bottomRightFunc func() Point, fillFunc func(*Box)) *Box {
-	return &Box{
-		topLeftFunc:     topLeftFunc,
-		bottomRightFunc: bottomRightFunc,
-		fillFunc:        fillFunc,
+func New() *Box {
+	return new(Box)
+}
+
+func (b *Box) SetAdjust(topLeft, bottomRight func() Point, depends ...*Box) {
+	b.topLeftFunc = topLeft
+	b.bottomRightFunc = bottomRight
+	for _, box := range depends {
+		adjustDependencies.Add(b, box)
+	}
+}
+
+func (b *Box) SetFill(fill func(*Box), depends ...*Box) {
+	b.fillFunc = fill
+	for _, box := range depends {
+		fillDependencies.Add(b, box)
 	}
 }
 

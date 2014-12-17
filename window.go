@@ -1,7 +1,5 @@
 package textbox
 
-import "github.com/nsf/termbox-go"
-
 var Window *Box
 
 func init() {
@@ -12,6 +10,6 @@ func init() {
 }
 
 func updateWindowGeometry() {
-	w, h := termbox.Size()
+	w, h := backend.Size()
 	Window.bottomRight = Point{w, h}
 }

@@ -1,5 +1,9 @@
 package textbox
 
+import (
+	"sync"
+)
+
 var adjustDependencies, fillDependencies *Dependencies
 
 func init() {
@@ -8,6 +12,7 @@ func init() {
 }
 
 type Dependencies struct {
+	sync.RWMutex
 	m map[*Box]map[*Box]struct{}
 }
 
@@ -18,6 +23,8 @@ func NewDependencies() *Dependencies {
 }
 
 func (d *Dependencies) Add(box, depend *Box) {
+	d.Lock()
+	defer d.Unlock()
 	m, ok := d.m[depend]
 	if !ok {
 		m = make(map[*Box]struct{})
@@ -27,6 +34,8 @@ func (d *Dependencies) Add(box, depend *Box) {
 }
 
 func (d *Dependencies) Iter(from *Box, fn func(*Box)) {
+	d.RLock()
+	defer d.RUnlock()
 	itered := make(map[*Box]struct{})
 	d.iter(from, fn, itered)
 }

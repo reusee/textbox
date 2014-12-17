@@ -2,48 +2,47 @@ package textbox
 
 import (
 	"sync"
-
-	"github.com/nsf/termbox-go"
 )
 
 var (
+	backend   Backend
 	closed    chan struct{}
 	closeOnce sync.Once
+	buffer    *Buffer
 
 	initCallbacks []func()
+	Events        chan Event
 )
 
-func init() {
+func Init(backend Backend) error {
+	backend = backend
 	closed = make(chan struct{})
-}
+	buffer = NewBuffer()
+	Events = make(chan Event)
 
-func Init() error {
-	termbox.Init()
-	events := make(chan *termbox.Event)
+	eventsChan := backend.EventsChan()
 	go func() {
 		for {
-			ev := termbox.PollEvent()
-			switch ev.Type {
-			case termbox.EventError: // NOCOVER
-				Close()
+			select {
+			case ev := <-eventsChan:
+				switch ev.(type) {
+				case ErrorEvent:
+					Close()
+					return
+				case ResizeEvent:
+					updateWindowGeometry()
+					backend.Flush(buffer)
+				}
+				select {
+				case Events <- ev:
+				default:
+				}
+			case <-closed:
 				return
-			default: // TODO cover this NOCOVER
-				events <- &ev
 			}
 		}
 	}()
-	go func() {
-		select {
-		case ev := <-events: // TODO cover this NOCOVER
-			switch ev.Type {
-			case termbox.EventResize: // NOCOVER
-				termbox.Flush()
-				updateWindowGeometry()
-			}
-		case <-closed:
-			return
-		}
-	}()
+
 	for _, cb := range initCallbacks {
 		cb()
 	}
@@ -53,7 +52,8 @@ func Init() error {
 func Close() {
 	closeOnce.Do(func() {
 		close(closed)
-		termbox.Close()
+		backend.Close()
 		initCallbacks = initCallbacks[0:0]
+		close(Events)
 	})
 }
