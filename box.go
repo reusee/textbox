@@ -14,7 +14,7 @@ type Box struct {
 	fillFunc                     func(*Box)
 }
 
-func (t *Window) Box() *Box {
+func (w *Window) Box() *Box {
 	return new(Box)
 }
 

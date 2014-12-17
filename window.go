@@ -36,10 +36,7 @@ func New(backend Backend) *Window {
 					win.updateWindowGeometry()
 					backend.Flush(win.buffer)
 				}
-				select {
-				case win.Events <- ev:
-				default:
-				}
+				win.Events <- ev
 			case <-win.closed:
 				return
 			}
@@ -51,15 +48,15 @@ func New(backend Backend) *Window {
 	return win
 }
 
-func (t *Window) updateWindowGeometry() {
-	w, h := t.backend.Size()
-	t.Root.bottomRight = Point{w, h}
+func (w *Window) updateWindowGeometry() {
+	width, height := w.backend.Size()
+	w.Root.bottomRight = Point{width, height}
 }
 
-func (t *Window) Close() {
-	t.closeOnce.Do(func() {
-		close(t.closed)
-		t.backend.Close()
-		close(t.Events)
+func (w *Window) Close() {
+	w.closeOnce.Do(func() {
+		close(w.closed)
+		w.backend.Close()
+		close(w.Events)
 	})
 }
