@@ -22,5 +22,5 @@ func (b *DumbBackend) Flush(buf *Buffer) {
 }
 
 func (b *DumbBackend) Size() (int, int) {
-	return 800, 600
+	return 80, 25
 }
