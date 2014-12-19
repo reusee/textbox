@@ -4,13 +4,6 @@ import (
 	"sync"
 )
 
-var adjustDependencies, fillDependencies *Dependencies
-
-func init() {
-	adjustDependencies = NewDependencies()
-	fillDependencies = NewDependencies()
-}
-
 type Dependencies struct {
 	sync.RWMutex
 	m map[*Box]map[*Box]struct{}
