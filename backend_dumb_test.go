@@ -16,7 +16,7 @@ func TestDumbBackend(t *testing.T) {
 			if !ok {
 				return
 			}
-			pt("event %v\n", ev)
+			_ = ev
 		}
 	}()
 

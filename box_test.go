@@ -30,10 +30,6 @@ func TestBox(t *testing.T) {
 		win.Root)
 	centerText.SetFill(func(box *Box) {
 	}, win.Root)
-
-	_ = topBar
-	_ = bottomBar
-	_ = centerText
 }
 
 func TestBoxPoints(t *testing.T) {
