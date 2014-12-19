@@ -43,3 +43,9 @@ func DisplayWidth(s string) (ret int) {
 	}
 	return
 }
+
+func MakeMove(fn func() Point, x, y int) func() Point {
+	return func() Point {
+		return fn().Move(x, y)
+	}
+}

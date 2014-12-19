@@ -9,28 +9,44 @@ func (p Point) Move(x, y int) Point {
 }
 
 type Box struct {
+	win                          *Window
 	topLeft, bottomRight         Point
 	topLeftFunc, bottomRightFunc func() Point
 	fillFunc                     func(*Box)
 }
 
 func (w *Window) Box() *Box {
-	return new(Box)
+	return &Box{
+		win: w,
+	}
 }
 
 func (b *Box) SetAdjust(topLeft, bottomRight func() Point, depends ...*Box) {
 	b.topLeftFunc = topLeft
 	b.bottomRightFunc = bottomRight
 	for _, box := range depends {
-		adjustDependencies.Add(b, box)
+		b.win.adjustDependencies.Add(b, box)
 	}
+	b.adjust()
+}
+
+func (b *Box) adjust() {
+	b.win.adjustDependencies.Iter(b, func(box *Box) {
+		box.topLeft = box.topLeftFunc()
+		box.bottomRight = box.bottomRightFunc()
+	})
 }
 
 func (b *Box) SetFill(fill func(*Box), depends ...*Box) {
 	b.fillFunc = fill
 	for _, box := range depends {
-		fillDependencies.Add(b, box)
+		b.win.fillDependencies.Add(b, box)
 	}
+	b.fill()
+}
+
+func (b *Box) fill() {
+	//TODO
 }
 
 func (b *Box) TopLeft() Point {

@@ -5,10 +5,11 @@ import (
 )
 
 type Window struct {
-	backend   Backend
-	closed    chan struct{}
-	closeOnce sync.Once
-	buffer    *Buffer
+	backend                              Backend
+	closed                               chan struct{}
+	closeOnce                            sync.Once
+	buffer                               *Buffer
+	adjustDependencies, fillDependencies *Dependencies
 
 	Events chan Event
 	Root   *Box
@@ -16,9 +17,11 @@ type Window struct {
 
 func New(backend Backend) *Window {
 	win := &Window{
-		backend: backend,
-		closed:  make(chan struct{}),
-		buffer:  NewBuffer(),
+		backend:            backend,
+		closed:             make(chan struct{}),
+		buffer:             NewBuffer(),
+		adjustDependencies: NewDependencies(),
+		fillDependencies:   NewDependencies(),
 
 		Events: make(chan Event),
 	}

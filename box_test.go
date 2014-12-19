@@ -2,7 +2,7 @@ package textbox
 
 import "testing"
 
-func TestBox(t *testing.T) {
+func TestBoxBasics(t *testing.T) {
 	win := New(NewDumbBackend())
 	defer win.Close()
 
@@ -73,5 +73,42 @@ func TestPointMove(t *testing.T) {
 	}
 	if p := (Point{5, 6}).Move(-7, -8); p.X != -2 || p.Y != -2 {
 		t.Fatal("move")
+	}
+}
+
+func TestResetAdjust(t *testing.T) {
+	win := New(NewDumbBackend())
+	defer win.Close()
+
+	b1 := win.Box()
+	b1.SetAdjust(win.Root.TopLeft, MakeMove(win.Root.TopLeft, 1, 1), win.Root)
+	b2 := win.Box()
+	b2.SetAdjust(MakeMove(b1.BottomRight, 1, 1), MakeMove(b2.TopLeft, 1, 1), b1)
+
+	if p := b1.TopLeft(); p.X != 0 || p.Y != 0 {
+		t.Fatal("point")
+	}
+	if p := b1.BottomRight(); p.X != 1 || p.Y != 1 {
+		t.Fatal("point")
+	}
+	if p := b2.TopLeft(); p.X != 2 || p.Y != 2 {
+		t.Fatal("point")
+	}
+	if p := b2.BottomRight(); p.X != 3 || p.Y != 3 {
+		t.Fatal("point")
+	}
+
+	b1.SetAdjust(MakeMove(win.Root.TopLeft, 3, 4), MakeMove(b1.TopLeft, 5, 6), win.Root)
+	if p := b1.TopLeft(); p.X != 3 || p.Y != 4 {
+		t.Fatal("point")
+	}
+	if p := b1.BottomRight(); p.X != 8 || p.Y != 10 {
+		t.Fatal("point")
+	}
+	if p := b2.TopLeft(); p.X != 9 || p.Y != 11 {
+		t.Fatal("point")
+	}
+	if p := b2.BottomRight(); p.X != 10 || p.Y != 12 {
+		t.Fatal("point")
 	}
 }
