@@ -1,11 +1,14 @@
 package textbox
 
 type DumbBackend struct {
-	events chan Event
+	width, height int
+	events        chan Event
 }
 
 func NewDumbBackend() *DumbBackend {
 	b := &DumbBackend{
+		width:  80,
+		height: 25,
 		events: make(chan Event),
 	}
 	return b
@@ -22,5 +25,11 @@ func (b *DumbBackend) Flush(buf *Buffer) {
 }
 
 func (b *DumbBackend) Size() (int, int) {
-	return 80, 25
+	return b.width, b.height
+}
+
+func (b *DumbBackend) Resize(width, height int) {
+	b.width = width
+	b.height = height
+	b.events <- ResizeEvent{width, height}
 }

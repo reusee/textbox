@@ -16,44 +16,49 @@ type Window struct {
 }
 
 func New(backend Backend) *Window {
+	width, height := backend.Size()
 	win := &Window{
 		backend:            backend,
 		closed:             make(chan struct{}),
-		buffer:             NewBuffer(),
+		buffer:             NewBuffer(width * height),
 		adjustDependencies: NewDependencies(),
 		fillDependencies:   NewDependencies(),
 
 		Events: make(chan Event),
 	}
 	win.Root = win.Box()
+	win.Root.SetAdjust(func() Point { return Point{0, 0} },
+		func() Point {
+			w, h := backend.Size()
+			return Point{w, h}
+		})
+	win.Root.Adjust()
 	eventsChan := backend.EventsChan()
 	go func() {
 		for {
 			select {
 			case ev := <-eventsChan:
-				switch ev.(type) {
+				switch ev := ev.(type) {
 				case ErrorEvent:
 					win.Close()
 					return
 				case ResizeEvent:
-					win.updateWindowGeometry()
+					win.buffer.Resize(ev.Width * ev.Height)
+					win.Root.Adjust()
+					win.Root.Fill()
 					backend.Flush(win.buffer)
 				}
-				win.Events <- ev
+				select {
+				case win.Events <- ev:
+				default:
+				}
 			case <-win.closed:
 				return
 			}
 		}
 	}()
 
-	win.updateWindowGeometry()
-
 	return win
-}
-
-func (w *Window) updateWindowGeometry() {
-	width, height := w.backend.Size()
-	w.Root.bottomRight = Point{width, height}
 }
 
 func (w *Window) Close() {

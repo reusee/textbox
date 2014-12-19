@@ -27,10 +27,10 @@ func (b *Box) SetAdjust(topLeft, bottomRight func() Point, depends ...*Box) {
 	for _, box := range depends {
 		b.win.adjustDependencies.Add(b, box)
 	}
-	b.adjust()
+	b.Adjust()
 }
 
-func (b *Box) adjust() {
+func (b *Box) Adjust() {
 	b.win.adjustDependencies.Iter(b, func(box *Box) {
 		box.topLeft = box.topLeftFunc()
 		box.bottomRight = box.bottomRightFunc()
@@ -42,11 +42,15 @@ func (b *Box) SetFill(fill func(*Box), depends ...*Box) {
 	for _, box := range depends {
 		b.win.fillDependencies.Add(b, box)
 	}
-	b.fill()
+	b.Fill()
 }
 
-func (b *Box) fill() {
-	//TODO
+func (b *Box) Fill() {
+	b.win.fillDependencies.Iter(b, func(box *Box) {
+		if box.fillFunc != nil {
+			box.fillFunc(box)
+		}
+	})
 }
 
 func (b *Box) TopLeft() Point {
